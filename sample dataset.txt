@@ -1,0 +1,39 @@
+import pandas as pd
+from fpdf import FPDF
+
+# Sample data (shortened for display)
+car_sensor_data = pd.DataFrame({
+    "timestamp": [0.00, 0.10, 0.20],
+    "speed (m/s)": [2.5, 2.6, 2.4],
+    "steering_angle (deg)": [0.0, 2.0, -1.5],
+    "lidar_front (m)": [10.0, 9.8, 8.9],
+    "lidar_left (m)": [5.6, 5.5, 4.8],
+    "lidar_right (m)": [5.5, 5.3, 5.2]
+})
+
+# Initialize PDF
+pdf = FPDF()
+pdf.set_auto_page_break(auto=True, margin=15)
+pdf.add_page()
+pdf.set_font("Arial", size=12)
+
+# Add title
+pdf.cell(200, 10, txt="Sample Dataset: Car Sensor Data", ln=True, align="C")
+
+# Add table headers
+col_width = pdf.w / 6.5
+row_height = 8
+for header in car_sensor_data.columns:
+    pdf.cell(col_width, row_height, header, border=1)
+pdf.ln(row_height)
+
+# Add rows
+for _, row in car_sensor_data.iterrows():
+    for item in row:
+        pdf.cell(col_width, row_height, str(item), border=1)
+    pdf.ln(row_height)
+
+# Save PDF
+pdf.output("car_sensor_data.pdf")
+
+print("PDF file generated: car_sensor_data.pdf")
